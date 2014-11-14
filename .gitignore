@@ -1,0 +1,15 @@
+## generic files to ignore
+*.asv
+*.lock
+*.tmp
+*.swp
+*.out
+*.dll
+*.exe
+*.suo
+*.mat
+
+Analysis_results/*
+Old_bin/*
+Raw_data/*
+Setup_files/*
