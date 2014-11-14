@@ -19,13 +19,14 @@ timestep_array = timestep_array'*timestep;
 
 % square_int_sum_h = trapz(timestep_array, source_sum_h.^2);
 % t_square_int_sum_h =  trapz(timestep_array,timestep_array.*source_sum_h.^2);
-square_int_sum_h = sum(timestep_array.*source_sum_h.^2);
-t_square_int_sum_h = sum(timestep_array.^2.*source_sum_h.^2);
 
-mu = t_square_int_sum_h/square_int_sum_h
+int_sum_h = sum(source_sum_h)*timestep;
+t_int_sum_h = sum(timestep_array.*source_sum_h)*timestep;
 
+% mu = t_square_int_sum_h/square_int_sum_h
+mu = t_int_sum_h/int_sum_h
 %delay = trapz(timestep_array, (timestep_array-mu).^2.*source_sum_h.^2)/square_int_sum_h;
-delay = sum(timestep_array.*(timestep_array-mu).^2.*source_sum_h.^2)/square_int_sum_h;
+delay = sum((timestep_array-mu).^2.*source_sum_h)*timestep/int_sum_h;
 delay = delay^0.5
 
 end

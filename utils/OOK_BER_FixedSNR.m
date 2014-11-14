@@ -22,7 +22,7 @@ CIR_VLC(end) = sum(CIR(end+1-mod(array_length,compressionFactor):end));
 delay = find(CIR_VLC,1);
 CIR_VLC = CIR_VLC(delay:end);
 
-% normalize channel
+% normalize channel by H(0)
 CIR_VLC = CIR_VLC/sum(CIR_VLC);
 
 % max gain
@@ -42,7 +42,7 @@ simu_unit = 10^4;
 num_err = zeros(length(Rb),1);
 % minimum errors 
 num_err_demand = 3000*ones(length(Rb));
-num_err_demand(1) = 75   ;
+num_err_demand(1) = 75;
 num_err_demand(2) = 75;
 
 % error rate
@@ -59,13 +59,8 @@ Eb = EbNo*No;
 
 for i = 1:length(Rb)
     simu_times = 0;
-    while num_err(i) < num_err_demand(i) % run the simulation until we have at least the minimum number of errors 
-        
-        if simu_times > 10000
-            break;
-        else
-            simu_times = simu_times + 1;
-        end
+    while num_err(i) < num_err_demand(i) && simu_times<10000 % run the simulation until we have at least the minimum number of errors 
+        simu_times = simu_times + 1;
         
         % samples per OOK symbol
         nsamp = floor(Fs/Rb(i)); 
@@ -87,16 +82,6 @@ for i = 1:length(Rb)
         % transmit over indoor VLC channel
         rx_signal = conv(CIR_VLC,tx_signal);
         % rx_signal = tx_signal; 
-%         
-%         if i==1 && simu_times ==1
-%             figure;
-%             plot(tx_signal);
-%         end
-%         if i==1 && simu_times ==1
-%             figure
-%             plot(rx_signal);
-%         end
-        
 
         % PD, O-E conversion
         rx_signal = R*rx_signal;
